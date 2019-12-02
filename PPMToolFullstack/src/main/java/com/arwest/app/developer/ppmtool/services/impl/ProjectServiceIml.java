@@ -5,9 +5,12 @@ import com.arwest.app.developer.ppmtool.exceptions.ProjectIdException;
 import com.arwest.app.developer.ppmtool.repositories.ProjectRepository;
 import com.arwest.app.developer.ppmtool.services.ProjectService;
 import com.arwest.app.developer.ppmtool.shared.dto.ProjectDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class ProjectServiceIml implements ProjectService {
@@ -15,6 +18,25 @@ public class ProjectServiceIml implements ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+
+    public ProjectDto getProjectById(String projectId){
+
+        ProjectDto returnValue = new ProjectDto();
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+
+        if(project == null){
+            throw new ProjectIdException("Project ID '" + projectId + "'does not exists");
+        }
+        BeanUtils.copyProperties(project, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public Iterable<Project> getAllProjects() {
+        return projectRepository.findAll();
+    }
 
     public ProjectDto createProject(ProjectDto project){
 
@@ -34,45 +56,24 @@ public class ProjectServiceIml implements ProjectService {
              throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase()+ "'already exists");
          }
     }
-    public ProjectDto getProjectById(String projectId){
+    @Override
+    public ProjectDto updateProject(String projectId, ProjectDto project) {
 
         ProjectDto returnValue = new ProjectDto();
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
-        if(project == null){
-            throw new ProjectIdException("Project ID '" + projectId + "'does not exists");
-        }
+        Project projectEntity = projectRepository.findByProjectIdentifier(projectId);
 
-        BeanUtils.copyProperties(project, returnValue);
+        if (projectEntity == null) throw new ProjectIdException("Project with this ID Not Found");
+
+        projectEntity.setProjectName(project.getProjectName());
+        projectEntity.setDescription(project.getDescription());
+        projectEntity.setEnd_date(project.getEnd_date());
+        projectEntity.setUpdated_At(new Date());
+
+        Project updatedProject = projectRepository.save(projectEntity);
+        returnValue = new ModelMapper().map(updatedProject, ProjectDto.class);
 
         return returnValue;
-    }
-
-
-    public Iterable<Project>findAllProjects(){
-        return projectRepository.findAll();
-    }
-
-    public void deleteProjectByIdentifier(String projectId){
-
-//        Project project = findProjectByIdentifier(projectId.toUpperCase());
-//        if (project == null){
-//            throw new ProjectIdException("Can not delete  project with ID: '" + projectId + "'does not exists");
-//        }
-        // projectRepository.delete(project);
-    }
-
-    public Project updateProjectById(String projectId){
-
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-
-        try{
-            projectRepository.save(project);
-        }catch (Exception e){
-            throw new ProjectIdException("Can not update  project with ID: '" + projectId + "'because it does not exists");
-        }
-
-        return project;
     }
 
 }

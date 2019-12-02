@@ -49,8 +49,26 @@ public class ProjectController {
 
     @GetMapping("/all")
     public Iterable<Project>getAllProjects(){
-        return null; //projectService.findAllProjects();
+        return projectService.getAllProjects();
     }
+
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<?>updateProject(@PathVariable String projectId, @RequestBody ProjectRequestModel project, BindingResult result){
+
+        ResponseEntity<?>errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Project returnValue = new Project();
+
+        ProjectDto projectDto = new ProjectDto();
+        BeanUtils.copyProperties(project, projectDto);
+
+        ProjectDto updateProject = projectService.updateProject(projectId, projectDto);
+        BeanUtils.copyProperties(updateProject, returnValue);
+
+        return new ResponseEntity<>(updateProject, HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable String projectId){
@@ -58,16 +76,6 @@ public class ProjectController {
       //  projectService.deleteProjectByIdentifier(projectId);
 
         return null; // new ResponseEntity<>(HttpStatus.resolve(204));
-    }
-
-    @PutMapping("/{projectId}")
-    public ResponseEntity<?>updateProject(@Valid @RequestBody Project project, BindingResult result){
-
-        ResponseEntity<?>errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
-
-
-        return new ResponseEntity<Project>(HttpStatus.CREATED);
     }
 
 
