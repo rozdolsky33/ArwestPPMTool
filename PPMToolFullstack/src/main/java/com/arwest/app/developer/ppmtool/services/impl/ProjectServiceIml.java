@@ -34,25 +34,32 @@ public class ProjectServiceIml implements ProjectService {
              throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase()+ "'already exists");
          }
     }
-    public Project findProjectByIdentifier(String projectId){
+    public ProjectDto getProjectById(String projectId){
 
+        ProjectDto returnValue = new ProjectDto();
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
         if(project == null){
             throw new ProjectIdException("Project ID '" + projectId + "'does not exists");
         }
-        return project;
+
+        BeanUtils.copyProperties(project, returnValue);
+
+        return returnValue;
     }
+
+
     public Iterable<Project>findAllProjects(){
         return projectRepository.findAll();
     }
 
     public void deleteProjectByIdentifier(String projectId){
-        Project project = findProjectByIdentifier(projectId.toUpperCase());
-        if (project == null){
-            throw new ProjectIdException("Can not delete  project with ID: '" + projectId + "'does not exists");
-        }
-        projectRepository.delete(project);
+
+//        Project project = findProjectByIdentifier(projectId.toUpperCase());
+//        if (project == null){
+//            throw new ProjectIdException("Can not delete  project with ID: '" + projectId + "'does not exists");
+//        }
+        // projectRepository.delete(project);
     }
 
     public Project updateProjectById(String projectId){

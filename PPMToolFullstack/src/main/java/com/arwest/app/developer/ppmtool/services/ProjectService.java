@@ -6,4 +6,5 @@ import com.arwest.app.developer.ppmtool.shared.dto.ProjectDto;
 public interface ProjectService {
 
     ProjectDto createProject(ProjectDto project);
+    ProjectDto getProjectById(String projectId);
 }

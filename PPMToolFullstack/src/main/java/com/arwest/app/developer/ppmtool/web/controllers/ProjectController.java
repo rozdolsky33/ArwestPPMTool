@@ -39,13 +39,12 @@ public class ProjectController {
 
         return new ResponseEntity<>(createProject, HttpStatus.CREATED);
     }
-
     @GetMapping("/{projectId}")
     public ResponseEntity<?>getProjectById(@PathVariable String projectId){
 
-       // Project project = projectService.findProjectByIdentifier(projectId);
+        ProjectDto project = projectService.getProjectById(projectId);
 
-        return null; // new ResponseEntity<Project>(project, HttpStatus.OK);
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
     @GetMapping("/all")
