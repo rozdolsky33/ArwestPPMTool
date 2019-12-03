@@ -3,7 +3,6 @@ package com.arwest.app.developer.ppmtool.web.controllers;
 import com.arwest.app.developer.ppmtool.domain.Project;
 import com.arwest.app.developer.ppmtool.services.MapValidationErrorService;
 import com.arwest.app.developer.ppmtool.services.ProjectService;
-
 import com.arwest.app.developer.ppmtool.shared.dto.ProjectDto;
 import com.arwest.app.developer.ppmtool.web.ui.request.ProjectRequestModel;
 import org.springframework.beans.BeanUtils;
@@ -73,7 +72,7 @@ public class ProjectController {
     public ResponseEntity<?> deleteProject(@PathVariable String projectId){
 
         projectService.deleteProject(projectId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT); //new ResponseEntity<>(HttpStatus.resolve(204));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
