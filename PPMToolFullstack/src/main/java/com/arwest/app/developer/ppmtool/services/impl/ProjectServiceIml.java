@@ -76,4 +76,15 @@ public class ProjectServiceIml implements ProjectService {
         return returnValue;
     }
 
+    @Override
+    public void deleteProject(String projectId) {
+
+        Project projectEntity = projectRepository.findByProjectIdentifier(projectId);
+
+        if (projectEntity == null) throw new ProjectIdException("Project with this ID Not Found");
+
+        projectRepository.delete(projectEntity);
+
+    }
+
 }

@@ -10,4 +10,5 @@ public interface ProjectService {
     ProjectDto getProjectById(String projectId);
     Iterable<Project> getAllProjects();
     ProjectDto updateProject(String projectId, ProjectDto projectDto);
+    void deleteProject(String projectId);
 }
