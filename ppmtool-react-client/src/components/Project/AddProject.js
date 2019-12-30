@@ -58,8 +58,6 @@ class AddProject extends Component {
               //bind on constructor
               //check state change in the react extension
             }
-            <h1>{errors.projectName}</h1>
-    
             <div className="project">
               <div className="container">
                 <div className="row">
